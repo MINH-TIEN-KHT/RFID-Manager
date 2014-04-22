@@ -3,8 +3,8 @@
 #include <QtSerialPort/QSerialPort>
 #include <QMessageBox>
 #include <QFile>
-#include "console.h"
-#include "settingsdialog.h"
+#include "files/AX12/AX12.h"
+#include "serial.h"
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -17,13 +17,8 @@ MainWindow::MainWindow(QWidget *parent) :
     // load Stylesheet
     loadAppStyle(currentStyle);
     // serialport
-    serial = new QSerialPort(this);
-    //console
-    console = new Console;
-    console->setEnabled(false);
-    setCentralWidget(console);
-
-    settings = new SettingsDialog;
+    Serial serialport;
+    serialport.SerialPortInit();
 
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
@@ -33,16 +28,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(openSerialPort()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(closeSerialPort()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
-    connect(ui->actionConfigure, SIGNAL(triggered()), settings, SLOT(show()));
-    connect(ui->actionClear, SIGNAL(triggered()), console, SLOT(clear()));
-    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
+//    connect(ui->actionAbout, SIGNAL(triggered()), this, SLOT(about()));
     connect(ui->actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-
-    connect(serial, SIGNAL(error(QSerialPort::SerialPortError)), this,
-            SLOT(handleError(QSerialPort::SerialPortError)));
-
-    connect(serial, SIGNAL(readyRead()), this, SLOT(readData()));
-    connect(console, SIGNAL(getData(QByteArray)), this, SLOT(writeData(QByteArray)));
 }
 
 MainWindow::~MainWindow()
@@ -124,55 +111,54 @@ void MainWindow::reloadAppStylesheet()
 
 void MainWindow::openSerialPort()
 {
-    SettingsDialog::Settings portSettings = settings->settings();
-    serial->setPortName(portSettings.name);
-    if (serial->open(QIODevice::ReadWrite)) {
-        if (serial->setBaudRate(portSettings.baudRate)
-                && serial->setDataBits(portSettings.dataBits)
-                && serial->setParity(portSettings.parity)
-                && serial->setStopBits(portSettings.stopBits)
-                && serial->setFlowControl(portSettings.flowControl)) {
+//    SettingsDialog::Settings portSettings = settings->settings();
+//    serialport->setPortName(portSettings.name);
+//    if (serialport->open(QIODevice::ReadWrite)) {
+//        if (serialport->setBaudRate(portSettings.baudRate)
+//                && serialport->setDataBits(portSettings.dataBits)
+//                && serialport->setParity(portSettings.parity)
+//                && serialport->setStopBits(portSettings.stopBits)
+//                && serialport->setFlowControl(portSettings.flowControl)) {
 
-            console->setEnabled(true);
-            console->setLocalEchoEnabled(portSettings.localEchoEnabled);
-            ui->actionConnect->setEnabled(false);
-            ui->actionDisconnect->setEnabled(true);
-            ui->actionConfigure->setEnabled(false);
-            ui->statusBar->showMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
-                                       .arg(portSettings.name).arg(portSettings.stringBaudRate).arg(portSettings.stringDataBits)
-                                       .arg(portSettings.stringParity).arg(portSettings.stringStopBits).arg(portSettings.stringFlowControl));
+//            ui->actionConnect->setEnabled(false);
+//            ui->actionDisconnect->setEnabled(true);
+//            ui->actionConfigure->setEnabled(false);
+//            ui->statusBar->showMessage(tr("Connected to %1 : %2, %3, %4, %5, %6")
+//                                       .arg(portSettings.name).arg(portSettings.stringBaudRate).arg(portSettings.stringDataBits)
+//                                       .arg(portSettings.stringParity).arg(portSettings.stringStopBits).arg(portSettings.stringFlowControl));
 
-        } else {
-            serial->close();
-            QMessageBox::critical(this, tr("Error"), serial->errorString());
+//        } else {
+//            serialport->close();
+//            QMessageBox::critical(this, tr("Error"), serialport->errorString());
 
-            ui->statusBar->showMessage(tr("Open error"));
-        }
-    } else {
-        QMessageBox::critical(this, tr("Error"), serial->errorString());
+//            ui->statusBar->showMessage(tr("Open error"));
+//        }
+//    } else {
+//        QMessageBox::critical(this, tr("Error"), serialport->errorString());
 
-        ui->statusBar->showMessage(tr("Configure error"));
-    }
+//        ui->statusBar->showMessage(tr("Configure error"));
+//    }
 }
 
 void MainWindow::closeSerialPort()
 {
-    serial->close();
-    console->setEnabled(false);
-    ui->actionConnect->setEnabled(true);
-    ui->actionDisconnect->setEnabled(false);
-    ui->actionConfigure->setEnabled(true);
-    ui->statusBar->showMessage(tr("Disconnected"));
+//    serialport->close();
+//    console->setEnabled(false);
+//    ui->actionConnect->setEnabled(true);
+//    ui->actionDisconnect->setEnabled(false);
+//    ui->actionConfigure->setEnabled(true);
+//    ui->statusBar->showMessage(tr("Disconnected"));
 }
 
 void MainWindow::writeData(const QByteArray &data)
 {
-    serial->write(data);
+    serialport->write(data);
 }
 
 void MainWindow::readData()
 {
-    QByteArray data = serial->readAll();
-    console->putData(data);
+    QByteArray data = serialport->readAll();
+//    console->putData(data);
 }
+
 

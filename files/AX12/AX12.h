@@ -10,6 +10,16 @@
 #endif
 #define gbpID 0xFE      //Dia chi toan cuc. Khi nhan duoc dia chi nay, toan bo slave se thuc hien lenh
 
+enum ERR_CODE
+{
+OK,
+RxD_Timeout,
+Wrong_Header,
+Wrong_ID,
+Wrong_Length,
+Wrong_CheckSum,
+} error_code;
+
 //Chuong trinh xu ly frame nhan duoc
 //Tham so bRxPacketLength:chieu dai toi da frame co the nhan duoc (<255)
 //Gia tri tra ve: (=0xff)-Loi, frame sai cu phap; tra cuu bien error_code

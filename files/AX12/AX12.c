@@ -1,21 +1,15 @@
 #include "AX12.h"
-#include <mega8.h>
+#include "serial.h"
+
+//#include <mega8.h>   edited by Tien
 
 unsigned char ID=0;        //Dia chi cua module hien tai
 unsigned char gbpRxBuffer[gbpRxBuffSize];   //Bo dem nhan-Chua toan bo frame nhan duoc
-enum ERR_CODE
-{ 
-OK,
-RxD_Timeout,
-Wrong_Header,
-Wrong_ID,
-Wrong_Length,
-Wrong_CheckSum,
-} error_code;
 
 #if (AX12MODE==BothRxTx || AX12MODE==RXonly)
 extern char rx_rd_index,rx_wr_index;  //con tro doc, ghi- duoc khai bao trong chuong trinh ngat nhan USART
 extern char rx_buffer[];
+
 unsigned char RxPacket(unsigned char bRxPacketLength)
 {
 #define RX_TIMEOUT_COUNT2  50L

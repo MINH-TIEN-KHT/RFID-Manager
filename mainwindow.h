@@ -50,7 +50,7 @@ private:
     Ui::MainWindow *ui;
     Console *console;
     SettingsDialog *settings;
-    QSerialPort *serial;
+    QSerialPort *serialport;
 };
 
 #endif // MAINWINDOW_H
