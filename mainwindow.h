@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
+#include "serial.h"
 
 namespace Ui {
 class MainWindow;
@@ -31,26 +32,17 @@ public:
     };
     G_MAINWINDOW_STYLE currentStyle;
     QString styleFileName;
-
+    Serial serialport;
 public slots:
     /** @brief Load a specific style */
     void loadAppStyle(G_MAINWINDOW_STYLE style);
     /** @brief Reload the CSS style sheet */
     void reloadAppStylesheet();
 
-    void openSerialPort();
-    void closeSerialPort();
-//    void about();
-    void writeData(const QByteArray &data);
-    void readData();
-
-//    void handleError(QSerialPort::SerialPortError error);
-
 private:
     Ui::MainWindow *ui;
     Console *console;
     SettingsDialog *settings;
-    QSerialPort *serialport;
 };
 
 #endif // MAINWINDOW_H

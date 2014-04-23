@@ -8,14 +8,11 @@ class Serial
 {
 public:
     Serial();
-
-    QSerialPort *serialPort;
+    QSerialPort serialPort;
     void SerialPortInit();
 public slots:
     void openSerialPort();
     void closeSerialPort();
-    void writeData(const QByteArray &data);
-    void readData();
 };
 
 #endif // SERIAL_H
