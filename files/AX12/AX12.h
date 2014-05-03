@@ -1,3 +1,10 @@
+#ifndef __AX12_H
+#define __AX12_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #define gbpRxBuffSize 128    //Chieu dai toi da cua frame du lieu nhan
 
 #define RXonly 0
@@ -44,3 +51,9 @@ unsigned char lowByte(unsigned int num);
 --B3: Khai bao lai gia tri cho RX_BUFFER_SIZE
 --B4: Khai bao loai chip trong file AX12.c
 */ 
+
+#ifdef __cplusplus
+}
+#endif
+
+#endif /* end of __AX12_H*/

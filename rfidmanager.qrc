@@ -108,6 +108,12 @@
         <file>files/images/actions/connect.png</file>
         <file>files/images/actions/disconnect.png</file>
         <file>files/images/actions/settings.png</file>
+        <file>files/images/delete-file-icon.png</file>
+        <file>files/images/Download-Folder-icon.png</file>
+        <file>files/images/Upload-Folder-icon.png</file>
+        <file>files/images/rfid.ico</file>
+        <file>files/images/Alarm-Error-icon.png</file>
+        <file>files/images/ok-icon.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file>files/styles/style-indoor.css</file>

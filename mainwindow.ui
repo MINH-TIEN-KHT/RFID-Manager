@@ -6,9 +6,21 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>640</width>
-    <height>480</height>
+    <width>480</width>
+    <height>320</height>
    </rect>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>480</width>
+    <height>320</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>480</width>
+    <height>320</height>
+   </size>
   </property>
   <property name="font">
    <font>
@@ -16,17 +28,456 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>Simple Terminal</string>
+   <string>RFID Manager</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout"/>
+   <widget class="QPushButton" name="eraseDataButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>143</y>
+      <width>70</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Delete RFID tag's information </string>
+    </property>
+    <property name="text">
+     <string>Erase</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="readDataButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>109</y>
+      <width>70</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Read information from RFID tag</string>
+    </property>
+    <property name="text">
+     <string>Read</string>
+    </property>
+   </widget>
+   <widget class="QPlainTextEdit" name="plainTextEdit">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>150</y>
+      <width>261</width>
+      <height>91</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="writeDataButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>76</y>
+      <width>70</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Write information to RFID tag</string>
+    </property>
+    <property name="text">
+     <string>Write</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>50</x>
+      <y>51</y>
+      <width>52</width>
+      <height>84</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>aa</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="aalineEditWrite">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="aalineEditRead">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>120</x>
+      <y>51</y>
+      <width>52</width>
+      <height>84</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_2">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>bb</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="bblineEditWrite">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="bblineEditRead">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>190</x>
+      <y>51</y>
+      <width>52</width>
+      <height>84</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_3">
+     <item>
+      <widget class="QLabel" name="label_3">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>cc</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="cclineEditWrite">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="cclineEditRead">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>51</y>
+      <width>52</width>
+      <height>84</height>
+     </rect>
+    </property>
+    <layout class="QVBoxLayout" name="verticalLayout_4">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+         <weight>50</weight>
+         <bold>false</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>nnn</string>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="nnnlineEditWrite">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="nnnlineEditRead">
+       <property name="minimumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="maximumSize">
+        <size>
+         <width>50</width>
+         <height>26</height>
+        </size>
+       </property>
+       <property name="font">
+        <font>
+         <pointsize>11</pointsize>
+        </font>
+       </property>
+       <property name="alignment">
+        <set>Qt::AlignCenter</set>
+       </property>
+       <property name="readOnly">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
+   <zorder>eraseDataButton</zorder>
+   <zorder>readDataButton</zorder>
+   <zorder>writeDataButton</zorder>
+   <zorder>writeDataButton</zorder>
+   <zorder>aalineEditWrite</zorder>
+   <zorder>bblineEditWrite</zorder>
+   <zorder>cclineEditWrite</zorder>
+   <zorder>nnnlineEditWrite</zorder>
+   <zorder>label</zorder>
+   <zorder>nnnlineEditRead</zorder>
+   <zorder>cclineEditRead</zorder>
+   <zorder>bblineEditRead</zorder>
+   <zorder>aalineEditRead</zorder>
+   <zorder>label_2</zorder>
+   <zorder>label_3</zorder>
+   <zorder>label_4</zorder>
+   <zorder>plainTextEdit</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>640</width>
+     <width>480</width>
      <height>21</height>
     </rect>
    </property>
@@ -44,13 +495,6 @@
     <addaction name="separator"/>
     <addaction name="actionQuit"/>
    </widget>
-   <widget class="QMenu" name="menuTools">
-    <property name="title">
-     <string>Tools</string>
-    </property>
-    <addaction name="actionConfigure"/>
-    <addaction name="actionClear"/>
-   </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
@@ -59,7 +503,6 @@
     <addaction name="actionAboutQt"/>
    </widget>
    <addaction name="menuCalls"/>
-   <addaction name="menuTools"/>
    <addaction name="menuHelp"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
@@ -71,8 +514,6 @@
    </attribute>
    <addaction name="actionConnect"/>
    <addaction name="actionDisconnect"/>
-   <addaction name="actionConfigure"/>
-   <addaction name="actionClear"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionAbout">
@@ -119,36 +560,6 @@
    </property>
    <property name="shortcut">
     <string>Ctrl+D</string>
-   </property>
-  </action>
-  <action name="actionConfigure">
-   <property name="icon">
-    <iconset resource="rfidmanager.qrc">
-     <normaloff>:/images/files/images/actions/settings.png</normaloff>:/images/files/images/actions/settings.png</iconset>
-   </property>
-   <property name="text">
-    <string>&amp;Configure</string>
-   </property>
-   <property name="toolTip">
-    <string>Configure serial port</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+C</string>
-   </property>
-  </action>
-  <action name="actionClear">
-   <property name="icon">
-    <iconset resource="rfidmanager.qrc">
-     <normaloff>:/images/files/images/actions/clear.png</normaloff>:/images/files/images/actions/clear.png</iconset>
-   </property>
-   <property name="text">
-    <string>C&amp;lear</string>
-   </property>
-   <property name="toolTip">
-    <string>Clear data</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+L</string>
    </property>
   </action>
   <action name="actionQuit">

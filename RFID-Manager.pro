@@ -13,12 +13,9 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    serial.cpp
+        mainwindow.cpp
 
-HEADERS  += mainwindow.h \
-    files/AX12/AX12.h \
-    serial.h
+HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
 

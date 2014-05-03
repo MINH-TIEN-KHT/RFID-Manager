@@ -3,14 +3,22 @@
 
 #include <QMainWindow>
 #include <QtSerialPort/QSerialPort>
-#include "serial.h"
+#include <QtSerialPort/QSerialPortInfo>
+#include <inttypes.h>
+
+#define RX_BUFFER_SIZE 11
+#define TX_BUFFER_SIZE 11
+
+#define DEVICE_ID   0x01
+#define LENGTH      0x07   // 1 byte instruction + 5 bytes data + 1 byte checksum
+
+#define PING        0x01
+#define READ_DATA   0x02
+#define WRITE_DATA  0x03
 
 namespace Ui {
 class MainWindow;
 }
-
-class Console;
-class SettingsDialog;
 
 class MainWindow : public QMainWindow
 {
@@ -32,17 +40,32 @@ public:
     };
     G_MAINWINDOW_STYLE currentStyle;
     QString styleFileName;
-    Serial serialport;
+
+signals:
+    void actionConnectTriggeredSignal();
+    void actionDisconnectTriggeredSignal();
+
+private slots:
+    void onActionConnectTriggered();
+    void onActionDisconnectTriggered();
+    void onWriteButtonMainwindowClicked();
+    void onReadButtonMainwindowClicked();
+
+
 public slots:
     /** @brief Load a specific style */
     void loadAppStyle(G_MAINWINDOW_STYLE style);
     /** @brief Reload the CSS style sheet */
     void reloadAppStylesheet();
 
+    void rfidReceivedDataUpdate(QByteArray rfidData);
+
 private:
     Ui::MainWindow *ui;
-    Console *console;
-    SettingsDialog *settings;
+    QSerialPort *serial;
+
+    uint8_t rfid_rd_data[5];
+    uint8_t rfid_wr_data[5];
 };
 
 #endif // MAINWINDOW_H
