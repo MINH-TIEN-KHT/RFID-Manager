@@ -64,6 +64,7 @@ private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
 
+    QString sendDataStr;
     uint8_t rfid_rd_data[5];
     uint8_t rfid_wr_data[5];
 };

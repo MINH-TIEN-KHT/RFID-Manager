@@ -6,7 +6,6 @@
 #include <QDebug>
 #include <QFile>
 
-QString sendDataStr;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -24,7 +23,6 @@ MainWindow::MainWindow(QWidget *parent) :
     serial = new QSerialPort(this);
 
     QString portname;
-
     foreach (const QSerialPortInfo &portInfo, QSerialPortInfo::availablePorts())
     {
         qDebug() << "Name        : " << portInfo.portName();
@@ -34,14 +32,8 @@ MainWindow::MainWindow(QWidget *parent) :
         if(portInfo.manufacturer() == "Prolific")
             break;
     }
-    qDebug() << "connect to " << portname;
+    qDebug() << "Target Port Name: " << portname;
     serial->setPortName(portname);
-    serial->setBaudRate(QSerialPort::Baud57600);
-    serial->setParity(QSerialPort::NoParity);
-    serial->setDataBits(QSerialPort::Data8);
-    serial->setFlowControl(QSerialPort::NoFlowControl);
-    serial->setStopBits(QSerialPort::OneStop);
-    qDebug() << "Serialport Init complete.";
 
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(onActionConnectTriggered()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(onActionDisconnectTriggered()));
@@ -52,6 +44,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
 MainWindow::~MainWindow()
 {
+    serial->flush();
+    serial->close();
     delete ui;
 }
 
@@ -64,6 +58,13 @@ void MainWindow::onActionConnectTriggered()
             qDebug()<<"Serial Port Opened Ok.";
             ui->actionConnect->setEnabled(false);
             ui->actionDisconnect->setEnabled(true);
+
+            serial->setBaudRate(QSerialPort::Baud57600, QSerialPort::AllDirections);
+            serial->setParity(QSerialPort::NoParity);
+            serial->setDataBits(QSerialPort::Data8);
+            serial->setFlowControl(QSerialPort::NoFlowControl);
+            serial->setStopBits(QSerialPort::OneStop);
+            qDebug() << "Serialport Init complete.";
         }
         else
         {
@@ -85,15 +86,9 @@ void MainWindow::onActionDisconnectTriggered()
 
 void MainWindow::onWriteButtonMainwindowClicked()
 {
-//    rfid_wr_data[0] = (uint8_t)(ui->aalineEditWrite->text().toUInt());
-//    rfid_wr_data[1] = (uint8_t)(ui->bblineEditWrite->text().toUInt());
-//    rfid_wr_data[2] = (uint8_t)(ui->cclineEditWrite->text().toUInt());
-//    rfid_wr_data[3] = (uint8_t)(ui->nnnlineEditWrite->text().toUInt()); // Get Low byte
-//    rfid_wr_data[4] = (uint8_t)(ui->nnnlineEditWrite->text().toUInt() >> 8); // Get High Byte
-
     qDebug("Write data button clicked");
-    // format data frame:  *iINSTRUCTIONaAAbBBcCCnNNN#
-//    sendDataStr.append("*");
+    // format data frame:  iINSTRUCTIONaAAbBBcCCnNNN#
+    sendDataStr.clear();
 
     sendDataStr.append("i" + QString::number(WRITE_DATA)); // add instruction
     sendDataStr.append("a" + ui->aalineEditWrite->text());
@@ -104,17 +99,22 @@ void MainWindow::onWriteButtonMainwindowClicked()
     sendDataStr.append("#");
 
     serial->write(sendDataStr.toLatin1());
+    serial->flush();
 }
 
 void MainWindow::onReadButtonMainwindowClicked()
 {
-//    rfid_wr_data[0] = 0;
-//    rfid_wr_data[1] = 0;
-//    rfid_wr_data[2] = 0;
-//    rfid_wr_data[3] = 0;
-//    rfid_wr_data[4] = 0;
-
     qDebug("Read data button clicked");
+
+    // format data frame:  iINSTRUCTION#
+    sendDataStr.clear();
+
+    sendDataStr.append("i" + QString::number(READ_DATA)); // add instruction
+
+    sendDataStr.append("#");
+
+    serial->write(sendDataStr.toLatin1());
+    serial->flush();
 }
 
 void MainWindow::loadAppStyle(MainWindow::G_MAINWINDOW_STYLE style)
