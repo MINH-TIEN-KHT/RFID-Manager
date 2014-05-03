@@ -93,16 +93,6 @@
      <string>Read</string>
     </property>
    </widget>
-   <widget class="QPlainTextEdit" name="plainTextEdit">
-    <property name="geometry">
-     <rect>
-      <x>50</x>
-      <y>150</y>
-      <width>261</width>
-      <height>91</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="writeDataButton">
     <property name="enabled">
      <bool>true</bool>
@@ -134,7 +124,7 @@
      <string>Write</string>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>50</x>
@@ -214,7 +204,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>120</x>
@@ -294,7 +284,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>190</x>
@@ -374,7 +364,7 @@
      </item>
     </layout>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>260</x>
@@ -454,23 +444,13 @@
      </item>
     </layout>
    </widget>
+   <zorder>layoutWidget</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>layoutWidget</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>eraseDataButton</zorder>
    <zorder>readDataButton</zorder>
    <zorder>writeDataButton</zorder>
-   <zorder>writeDataButton</zorder>
-   <zorder>aalineEditWrite</zorder>
-   <zorder>bblineEditWrite</zorder>
-   <zorder>cclineEditWrite</zorder>
-   <zorder>nnnlineEditWrite</zorder>
-   <zorder>label</zorder>
-   <zorder>nnnlineEditRead</zorder>
-   <zorder>cclineEditRead</zorder>
-   <zorder>bblineEditRead</zorder>
-   <zorder>aalineEditRead</zorder>
-   <zorder>label_2</zorder>
-   <zorder>label_3</zorder>
-   <zorder>label_4</zorder>
-   <zorder>plainTextEdit</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">

@@ -37,8 +37,14 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->actionConnect, SIGNAL(triggered()), this, SLOT(onActionConnectTriggered()));
     connect(ui->actionDisconnect, SIGNAL(triggered()), this, SLOT(onActionDisconnectTriggered()));
+
+    connect(serial, SIGNAL(readyRead()), this, SLOT(onReceiveData()));
+    connect(this, SIGNAL(receiveDataComplete()), this, SLOT(onReceiveDataProcess()));
+    connect(this, SIGNAL(dataProcessComplete()), this, SLOT(rfidReceivedDataUpdate()));
+
     connect(ui->writeDataButton, SIGNAL(clicked()),this, SLOT(onWriteButtonMainwindowClicked()));
     connect(ui->readDataButton, SIGNAL(clicked()),this, SLOT(onReadButtonMainwindowClicked()));
+    connect(ui->eraseDataButton, SIGNAL(clicked()), this, SLOT(onEraseButtonMainwindowClicked()));
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
@@ -117,6 +123,103 @@ void MainWindow::onReadButtonMainwindowClicked()
     serial->flush();
 }
 
+void MainWindow::onEraseButtonMainwindowClicked()
+{
+    qDebug("Erase data button clicked");
+    // format data frame:  iINSTRUCTIONaAAbBBcCCnNNN#
+    sendDataStr.clear();
+
+    sendDataStr.append("i" + QString::number(WRITE_DATA)); // add instruction
+    sendDataStr.append("a0");
+    sendDataStr.append("b0");
+    sendDataStr.append("c0");
+    sendDataStr.append("n0");
+
+    sendDataStr.append("#");
+
+    serial->write(sendDataStr.toLatin1());
+    serial->flush();
+}
+
+void MainWindow::onReceiveData()
+{
+    QString str;
+    uint8_t size;
+    if(serial->bytesAvailable())
+    {
+       str = QString::fromLatin1(serial->readAll());
+       receiveDataStr.append(str);
+       size = receiveDataStr.size();
+
+       if(receiveDataStr.at(size-1)== '#')
+       {
+           serial->flush();
+           emit receiveDataComplete();
+       }
+    }
+}
+
+void MainWindow::onReceiveDataProcess()
+{
+    uint8_t i, flag=0;
+    uint8_t size = receiveDataStr.size();
+
+    aaValueStr.clear();
+    bbValueStr.clear();
+    ccValueStr.clear();
+    nnnValueStr.clear();
+
+    for(i=0; i<size; i++)
+    {
+        if(receiveDataStr.at(i) == 'a')
+        {
+            qDebug("match a");
+            flag = AA_SIGN;
+        }
+        else if(receiveDataStr.at(i) == 'b')
+        {
+            qDebug("match b");
+            flag = BB_SIGN;
+        }
+        else if(receiveDataStr.at(i) == 'c')
+        {
+            qDebug("match c");
+            flag = CC_SIGN;
+        }
+        else if(receiveDataStr.at(i) == 'n')
+        {
+            qDebug("match n");
+            flag = INS_SIGN;
+        }
+        else if(receiveDataStr.at(i) == '#')
+        {
+            qDebug("match #");
+            break;
+        }
+        else
+        {
+            if(flag == AA_SIGN)
+            {
+                aaValueStr.append(receiveDataStr.at(i));
+            }
+            else if(flag == BB_SIGN)
+            {
+                bbValueStr.append(receiveDataStr.at(i));
+            }
+            else if(flag == CC_SIGN)
+            {
+                ccValueStr.append(receiveDataStr.at(i));
+            }
+            else if(flag == INS_SIGN)
+            {
+                nnnValueStr.append(receiveDataStr.at(i));
+            }
+        }
+    }
+    receiveDataStr.clear();
+    emit dataProcessComplete();
+}
+
 void MainWindow::loadAppStyle(MainWindow::G_MAINWINDOW_STYLE style)
 {
     switch (style)
@@ -189,13 +292,11 @@ void MainWindow::reloadAppStylesheet()
     delete styleSheet;
 }
 
-void MainWindow::rfidReceivedDataUpdate(QByteArray rfidData)
+void MainWindow::rfidReceivedDataUpdate()
 {
-//    ui->aalineEditRead->setText(QString::number(rfidData[0]));
-//    ui->bblineEditRead->setText(QString::number(rfidData[1]));
-//    ui->cclineEditRead->setText(QString::number(rfidData[2]));
-//    ui->nnnlineEditRead->setText(QString::number(rfidData[3] + rfidData[4]*256));
-    qDebug()<< "show receive data";
-    ui->plainTextEdit->insertPlainText(QString::fromLatin1(rfidData));
+    ui->aalineEditRead->setText(aaValueStr);
+    ui->bblineEditRead->setText(bbValueStr);
+    ui->cclineEditRead->setText(ccValueStr);
+    ui->nnnlineEditRead->setText(nnnValueStr);
 }
 

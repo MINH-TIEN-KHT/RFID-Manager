@@ -6,15 +6,16 @@
 #include <QtSerialPort/QSerialPortInfo>
 #include <inttypes.h>
 
-#define RX_BUFFER_SIZE 11
-#define TX_BUFFER_SIZE 11
-
-#define DEVICE_ID   0x01
-#define LENGTH      0x07   // 1 byte instruction + 5 bytes data + 1 byte checksum
-
 #define PING        0x01
 #define READ_DATA   0x02
 #define WRITE_DATA  0x03
+
+#define INS_SIGN 1
+#define AA_SIGN 2
+#define BB_SIGN 3
+#define CC_SIGN 4
+#define NNN_SIGN 5
+#define SHARP_SIGN 6
 
 namespace Ui {
 class MainWindow;
@@ -44,13 +45,16 @@ public:
 signals:
     void actionConnectTriggeredSignal();
     void actionDisconnectTriggeredSignal();
-
+    void receiveDataComplete();
+    void dataProcessComplete();
 private slots:
     void onActionConnectTriggered();
     void onActionDisconnectTriggered();
     void onWriteButtonMainwindowClicked();
     void onReadButtonMainwindowClicked();
-
+    void onEraseButtonMainwindowClicked();
+    void onReceiveData();
+    void onReceiveDataProcess();
 
 public slots:
     /** @brief Load a specific style */
@@ -58,15 +62,19 @@ public slots:
     /** @brief Reload the CSS style sheet */
     void reloadAppStylesheet();
 
-    void rfidReceivedDataUpdate(QByteArray rfidData);
+    void rfidReceivedDataUpdate();
 
 private:
     Ui::MainWindow *ui;
     QSerialPort *serial;
 
     QString sendDataStr;
-    uint8_t rfid_rd_data[5];
-    uint8_t rfid_wr_data[5];
+    QString receiveDataStr;
+
+    QString aaValueStr;
+    QString bbValueStr;
+    QString ccValueStr;
+    QString nnnValueStr;
 };
 
 #endif // MAINWINDOW_H
