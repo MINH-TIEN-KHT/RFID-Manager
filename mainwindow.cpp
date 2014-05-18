@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QFile>
+#include <QDate>
 
 
 MainWindow::MainWindow(QWidget *parent) :
@@ -294,9 +295,49 @@ void MainWindow::reloadAppStylesheet()
 
 void MainWindow::rfidReceivedDataUpdate()
 {
+    QDate curDate;
+    int16_t aaValue=0, bbValue=0, ccValue=0, nnnValue=0;
+
     ui->aalineEditRead->setText(aaValueStr);
     ui->bblineEditRead->setText(bbValueStr);
     ui->cclineEditRead->setText(ccValueStr);
     ui->nnnlineEditRead->setText(nnnValueStr);
-}
 
+    aaValue = aaValueStr.toInt();
+    bbValue = bbValueStr.toInt();
+    ccValue = ccValueStr.toInt();
+    nnnValue = nnnValueStr.toInt();
+
+    curDate = QDate::currentDate();
+    if(aaValue>=1 && aaValue<=99 && (bbValue == (curDate.day() + curDate.dayOfWeek())))   // Tag Ok
+    {
+        qDebug("Read data button clicked");
+
+        // data frame:  iINSTRUCTIONpNUMPULSE#
+        sendDataStr.clear();
+
+        sendDataStr.append("i" + QString::number(OUTPUT_PULSE)); // add instruction
+        sendDataStr.append("p" + QString::number(nnnValue));   // number of pulse to be created
+
+        sendDataStr.append("#");
+
+        serial->write(sendDataStr.toLatin1());
+        serial->flush();
+
+        QMessageBox msgBox;
+        QPixmap pixmap(":/images/files/images/ok-icon.png");
+
+        msgBox.setIconPixmap(pixmap);
+        msgBox.setStandardButtons(QMessageBox::Cancel);
+        msgBox.exec();
+    }
+    else
+    {
+        QMessageBox msgBox;
+        QPixmap pixmap(":/images/files/images/Alarm-Error-icon.png");
+
+        msgBox.setIconPixmap(pixmap);
+        msgBox.setStandardButtons(QMessageBox::Cancel);
+        msgBox.exec();
+    }
+}
