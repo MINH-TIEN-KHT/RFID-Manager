@@ -28,7 +28,11 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>RFID Manager</string>
+   <string>KHT-MFRC522</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="rfidmanager.qrc">
+    <normaloff>:/images/files/images/Icon_rfid_tag.ico</normaloff>:/images/files/images/Icon_rfid_tag.ico</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
    <widget class="QPushButton" name="eraseDataButton">
@@ -480,7 +484,6 @@
      <string>Help</string>
     </property>
     <addaction name="actionAbout"/>
-    <addaction name="actionAboutQt"/>
    </widget>
    <addaction name="menuCalls"/>
    <addaction name="menuHelp"/>

@@ -114,6 +114,7 @@
         <file>files/images/rfid.ico</file>
         <file>files/images/Alarm-Error-icon.png</file>
         <file>files/images/ok-icon.png</file>
+        <file>files/images/Icon_rfid_tag.ico</file>
     </qresource>
     <qresource prefix="/styles">
         <file>files/styles/style-indoor.css</file>

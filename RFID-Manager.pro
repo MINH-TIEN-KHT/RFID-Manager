@@ -21,3 +21,4 @@ FORMS    += mainwindow.ui
 
 RESOURCES += \
     rfidmanager.qrc
+RC_FILE = files/images/appicon.rc
