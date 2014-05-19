@@ -28,7 +28,7 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>KHT-MFRC522</string>
+   <string>KHT-RFID</string>
   </property>
   <property name="windowIcon">
    <iconset resource="rfidmanager.qrc">

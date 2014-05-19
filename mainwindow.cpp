@@ -72,6 +72,13 @@ void MainWindow::onActionConnectTriggered()
             serial->setFlowControl(QSerialPort::NoFlowControl);
             serial->setStopBits(QSerialPort::OneStop);
             qDebug() << "Serialport Init complete.";
+
+            serial->setRequestToSend(0);
+            serial->setDataTerminalReady(1);
+            serial->setDataTerminalReady(0);
+//            serial->setRts(0); // 3V3 output on boot0
+//            serial->setDtr(1); // 0v output on reset
+//            serial->setDtr(0); // 3V3 output on reset
         }
         else
         {
