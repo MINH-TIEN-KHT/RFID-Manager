@@ -43,9 +43,14 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(this, SIGNAL(receiveDataComplete()), this, SLOT(onReceiveDataProcess()));
     connect(this, SIGNAL(dataProcessComplete()), this, SLOT(rfidReceivedDataUpdate()));
 
-    connect(ui->writeDataButton, SIGNAL(clicked()),this, SLOT(onWriteButtonMainwindowClicked()));
-    connect(ui->readDataButton, SIGNAL(clicked()),this, SLOT(onReadButtonMainwindowClicked()));
-    connect(ui->eraseDataButton, SIGNAL(clicked()), this, SLOT(onEraseButtonMainwindowClicked()));
+    connect(ui->writeDataButton, SIGNAL(clicked()), this, SLOT(onWriteDataButtonClicked()));
+    connect(ui->readDataButton, SIGNAL(clicked()), this, SLOT(onReadDataButtonClicked()));
+    connect(ui->eraseDataButton, SIGNAL(clicked()), this, SLOT(onEraseDataButtonClicked()));
+
+    connect(this, SIGNAL(writeTag()), this, SLOT(WriteRFIDData()));
+    connect(this, SIGNAL(readTag()), this, SLOT(ReadRFIDData()));
+    connect(this, SIGNAL(eraseTag()), this, SLOT(EraseRFIDData()));
+
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 }
 
@@ -98,25 +103,63 @@ void MainWindow::onActionDisconnectTriggered()
     }
 }
 
-void MainWindow::onWriteButtonMainwindowClicked()
+void MainWindow::WriteRFIDData()
 {
+    QMessageBox msgBox;
+    bool aaOK, bbOK, ccOK, nnnOK;
     qDebug("Write data button clicked");
     // format data frame:  iINSTRUCTIONaAAbBBcCCnNNN#
     sendDataStr.clear();
 
-    sendDataStr.append("i" + QString::number(WRITE_DATA)); // add instruction
-    sendDataStr.append("a" + ui->aalineEditWrite->text());
-    sendDataStr.append("b" + ui->bblineEditWrite->text());
-    sendDataStr.append("c" + ui->cclineEditWrite->text());
-    sendDataStr.append("n" + ui->nnnlineEditWrite->text());
+    if(ui->aalineEditWrite->text().isEmpty() || \
+            ui->bblineEditWrite->text().isEmpty() || \
+            ui->cclineEditWrite->text().isEmpty() || \
+            ui->nnnlineEditWrite->text().isEmpty())
+    {
+        msgBox.setText("Data field is empty, please try again!");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+    else if(ui->aalineEditWrite->text().toInt(&aaOK)<0 ||
+            ui->aalineEditWrite->text().toInt()>99 ||
+            ui->bblineEditWrite->text().toInt(&bbOK)<0 ||
+            ui->bblineEditWrite->text().toInt()>38 ||
+            ui->cclineEditWrite->text().toInt(&ccOK)<0 ||
+            ui->cclineEditWrite->text().toInt()>99 ||
+            ui->nnnlineEditWrite->text().toInt(&nnnOK)<0 ||
+            ui->nnnlineEditWrite->text().toInt()>999
+            )
+    {
+        msgBox.setText("Data range is not correct, please try again!");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+    else if(aaOK==0 || bbOK==0 || ccOK==0 || nnnOK==0)
+    {
+        msgBox.setText("Data type is not correct, please try again!");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+    else
+    {
+        sendDataStr.append("i" + QString::number(WRITE_DATA)); // add instruction
+        sendDataStr.append("a" + ui->aalineEditWrite->text());
+        sendDataStr.append("b" + ui->bblineEditWrite->text());
+        sendDataStr.append("c" + ui->cclineEditWrite->text());
+        sendDataStr.append("n" + ui->nnnlineEditWrite->text());
 
-    sendDataStr.append("#");
+        sendDataStr.append("#");
 
-    serial->write(sendDataStr.toLatin1());
-    serial->flush();
+        serial->write(sendDataStr.toLatin1());
+        serial->flush();
+
+        msgBox.setText("Card writing is successful.");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
+    }
 }
 
-void MainWindow::onReadButtonMainwindowClicked()
+void MainWindow::ReadRFIDData()
 {
     qDebug("Read data button clicked");
 
@@ -128,11 +171,12 @@ void MainWindow::onReadButtonMainwindowClicked()
     sendDataStr.append("#");
 
     serial->write(sendDataStr.toLatin1());
-    serial->flush();
+    serial->flush();  
 }
 
-void MainWindow::onEraseButtonMainwindowClicked()
+void MainWindow::EraseRFIDData()
 {
+    QMessageBox msgBox;
     qDebug("Erase data button clicked");
     // format data frame:  iINSTRUCTIONaAAbBBcCCnNNN#
     sendDataStr.clear();
@@ -147,6 +191,15 @@ void MainWindow::onEraseButtonMainwindowClicked()
 
     serial->write(sendDataStr.toLatin1());
     serial->flush();
+
+    ui->aalineEditRead->setText("0");
+    ui->bblineEditRead->setText("0");
+    ui->cclineEditRead->setText("0");
+    ui->nnnlineEditRead->setText("0");
+
+    msgBox.setText("Card erasing is successful.");
+    msgBox.setIcon(QMessageBox::Information);
+    msgBox.exec();
 }
 
 void MainWindow::onReceiveData()
@@ -226,6 +279,45 @@ void MainWindow::onReceiveDataProcess()
     }
     receiveDataStr.clear();
     emit dataProcessComplete();
+}
+
+void MainWindow::onWriteDataButtonClicked()
+{
+    QMessageBox msgBox;
+    if(serial->isOpen())
+        emit writeTag();
+    else
+    {
+        msgBox.setText("System is not connected, please try to connect again.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+}
+
+void MainWindow::onReadDataButtonClicked()
+{
+    QMessageBox msgBox;
+    if(serial->isOpen())
+        emit readTag();
+    else
+    {
+        msgBox.setText("System is not connected, please try to connect again.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+}
+
+void MainWindow::onEraseDataButtonClicked()
+{
+    QMessageBox msgBox;
+    if(serial->isOpen())
+        emit eraseTag();
+    else
+    {
+        msgBox.setText("System is not connected, please try to connect again.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
 }
 
 void MainWindow::loadAppStyle(MainWindow::G_MAINWINDOW_STYLE style)
@@ -316,7 +408,7 @@ void MainWindow::rfidReceivedDataUpdate()
     nnnValue = nnnValueStr.toInt();
 
     curDate = QDate::currentDate();
-    if(aaValue>=1 && aaValue<=99 && (bbValue == (curDate.day() + curDate.dayOfWeek())))   // Tag Ok
+    if(aaValue>=1 && aaValue<=99 && (bbValue == (curDate.day() + curDate.dayOfWeek())))   // Tag Valid
     {
         qDebug("Read data button clicked");
 
@@ -335,15 +427,27 @@ void MainWindow::rfidReceivedDataUpdate()
         QPixmap pixmap(":/images/files/images/ok-icon.png");
 
         msgBox.setIconPixmap(pixmap);
+        msgBox.setText("Card is valid.");
         msgBox.setStandardButtons(QMessageBox::Cancel);
         msgBox.exec();
+        qDebug("exit Message box.");
+
+        emit eraseTag();
     }
-    else
+    else if(aaValue==0 && bbValue==0 && ccValue==0 && nnnValue==0 )
+    {
+        QMessageBox msgBox;
+        msgBox.setText("Card is empty.");
+        msgBox.setIcon(QMessageBox::Information);
+        msgBox.exec();
+    }
+    else // Tag Invalid
     {
         QMessageBox msgBox;
         QPixmap pixmap(":/images/files/images/Alarm-Error-icon.png");
 
         msgBox.setIconPixmap(pixmap);
+        msgBox.setText("Card is invalid.");
         msgBox.setStandardButtons(QMessageBox::Cancel);
         msgBox.exec();
     }

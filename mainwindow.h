@@ -49,14 +49,21 @@ signals:
     void actionDisconnectTriggeredSignal();
     void receiveDataComplete();
     void dataProcessComplete();
+    void writeTag();
+    void readTag();
+    void eraseTag();
 private slots:
     void onActionConnectTriggered();
     void onActionDisconnectTriggered();
-    void onWriteButtonMainwindowClicked();
-    void onReadButtonMainwindowClicked();
-    void onEraseButtonMainwindowClicked();
     void onReceiveData();
     void onReceiveDataProcess();
+    void onWriteDataButtonClicked();
+    void onReadDataButtonClicked();
+    void onEraseDataButtonClicked();
+    void WriteRFIDData();
+    void ReadRFIDData();
+    void EraseRFIDData();
+
 
 public slots:
     /** @brief Load a specific style */

@@ -42,7 +42,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>143</y>
+      <y>126</y>
       <width>70</width>
       <height>26</height>
      </rect>
@@ -73,7 +73,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>109</y>
+      <y>88</y>
       <width>70</width>
       <height>26</height>
      </rect>
@@ -104,7 +104,7 @@
     <property name="geometry">
      <rect>
       <x>360</x>
-      <y>76</y>
+      <y>50</y>
       <width>70</width>
       <height>26</height>
      </rect>
@@ -134,7 +134,7 @@
       <x>50</x>
       <y>51</y>
       <width>52</width>
-      <height>84</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout">
@@ -180,6 +180,19 @@
       </widget>
      </item>
      <item>
+      <spacer name="verticalSpacer">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLineEdit" name="aalineEditRead">
        <property name="minimumSize">
         <size>
@@ -214,7 +227,7 @@
       <x>120</x>
       <y>51</y>
       <width>52</width>
-      <height>84</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -260,6 +273,19 @@
       </widget>
      </item>
      <item>
+      <spacer name="verticalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLineEdit" name="bblineEditRead">
        <property name="minimumSize">
         <size>
@@ -294,7 +320,7 @@
       <x>190</x>
       <y>51</y>
       <width>52</width>
-      <height>84</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -340,6 +366,19 @@
       </widget>
      </item>
      <item>
+      <spacer name="verticalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
       <widget class="QLineEdit" name="cclineEditRead">
        <property name="minimumSize">
         <size>
@@ -374,7 +413,7 @@
       <x>260</x>
       <y>51</y>
       <width>52</width>
-      <height>84</height>
+      <height>101</height>
      </rect>
     </property>
     <layout class="QVBoxLayout" name="verticalLayout_4">
@@ -418,6 +457,19 @@
         <set>Qt::AlignCenter</set>
        </property>
       </widget>
+     </item>
+     <item>
+      <spacer name="verticalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>20</width>
+         <height>40</height>
+        </size>
+       </property>
+      </spacer>
      </item>
      <item>
       <widget class="QLineEdit" name="nnnlineEditRead">
