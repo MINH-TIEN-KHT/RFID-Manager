@@ -500,6 +500,50 @@
      </item>
     </layout>
    </widget>
+   <widget class="QDateTimeEdit" name="dateTimeEdit">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>210</y>
+      <width>181</width>
+      <height>22</height>
+     </rect>
+    </property>
+    <property name="readOnly">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="setDateTimeButton">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>360</x>
+      <y>207</y>
+      <width>70</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>70</width>
+      <height>26</height>
+     </size>
+    </property>
+    <property name="toolTip">
+     <string>Delete RFID tag's information </string>
+    </property>
+    <property name="text">
+     <string>Sync</string>
+    </property>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
@@ -507,6 +551,8 @@
    <zorder>eraseDataButton</zorder>
    <zorder>readDataButton</zorder>
    <zorder>writeDataButton</zorder>
+   <zorder>dateTimeEdit</zorder>
+   <zorder>setDateTimeButton</zorder>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
@@ -611,6 +657,19 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <tabstops>
+  <tabstop>aalineEditWrite</tabstop>
+  <tabstop>bblineEditWrite</tabstop>
+  <tabstop>cclineEditWrite</tabstop>
+  <tabstop>nnnlineEditWrite</tabstop>
+  <tabstop>writeDataButton</tabstop>
+  <tabstop>readDataButton</tabstop>
+  <tabstop>eraseDataButton</tabstop>
+  <tabstop>aalineEditRead</tabstop>
+  <tabstop>bblineEditRead</tabstop>
+  <tabstop>cclineEditRead</tabstop>
+  <tabstop>nnnlineEditRead</tabstop>
+ </tabstops>
  <resources>
   <include location="rfidmanager.qrc"/>
  </resources>

@@ -5,8 +5,11 @@
 #include <QMessageBox>
 #include <QDebug>
 #include <QFile>
-#include <QDate>
+#include <QDateTime>
+#include <QTimer>
 
+QDate curDate;
+QTime curTime;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -20,6 +23,16 @@ MainWindow::MainWindow(QWidget *parent) :
     ui->actionConnect->setEnabled(true);
     ui->actionDisconnect->setEnabled(false);
     ui->actionQuit->setEnabled(true);
+
+    curDate = QDate::currentDate();
+    ui->bblineEditWrite->setText(QString::number(curDate.day()+curDate.dayOfWeek()));
+
+    ui->dateTimeEdit->setDisplayFormat("ddd, dd/MM/yyyy hh:mm:ss");
+    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+
+    QTimer *timer = new QTimer(this);
+    connect(timer, SIGNAL(timeout()), this, SLOT(updateTime()));
+    timer->start(1000);
 
     serial = new QSerialPort(this);
 
@@ -46,10 +59,12 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->writeDataButton, SIGNAL(clicked()), this, SLOT(onWriteDataButtonClicked()));
     connect(ui->readDataButton, SIGNAL(clicked()), this, SLOT(onReadDataButtonClicked()));
     connect(ui->eraseDataButton, SIGNAL(clicked()), this, SLOT(onEraseDataButtonClicked()));
+    connect(ui->setDateTimeButton, SIGNAL(clicked()), this, SLOT(onSetDateTimeButtonClicked()));
 
     connect(this, SIGNAL(writeTag()), this, SLOT(WriteRFIDData()));
     connect(this, SIGNAL(readTag()), this, SLOT(ReadRFIDData()));
     connect(this, SIGNAL(eraseTag()), this, SLOT(EraseRFIDData()));
+    connect(this, SIGNAL(syncDateTime()), this, SLOT(SyncRTCDateTime()));
 
     connect(ui->actionQuit, SIGNAL(triggered()), this, SLOT(close()));
 }
@@ -153,9 +168,11 @@ void MainWindow::WriteRFIDData()
         serial->write(sendDataStr.toLatin1());
         serial->flush();
 
-        msgBox.setText("Card writing is successful.");
-        msgBox.setIcon(QMessageBox::Information);
-        msgBox.exec();
+        curDate = QDate::currentDate();
+        ui->bblineEditWrite->setText(QString::number(curDate.day()+curDate.dayOfWeek()));
+//        msgBox.setText("Card writing is successful.");
+//        msgBox.setIcon(QMessageBox::Information);
+//        msgBox.exec();
     }
 }
 
@@ -200,6 +217,34 @@ void MainWindow::EraseRFIDData()
     msgBox.setText("Card erasing is successful.");
     msgBox.setIcon(QMessageBox::Information);
     msgBox.exec();
+}
+
+void MainWindow::updateTime()
+{
+    ui->dateTimeEdit->setDateTime(QDateTime::currentDateTime());
+}
+
+void MainWindow::SyncRTCDateTime()
+{
+    qDebug("Sync button clicked");
+    sendDataStr.clear();
+
+    curDate = QDate::currentDate();
+    curTime = QTime::currentTime();
+
+    sendDataStr.append("i" + QString::number(SET_DATETIME)); // add instruction
+    sendDataStr.append("s" + QString::number(curTime.second())); // seconds
+    sendDataStr.append("m" + QString::number(curTime.minute())); // minutes
+    sendDataStr.append("h" + QString::number(curTime.hour())); // hours
+    sendDataStr.append("d" + QString::number(curDate.day())); // days of month (1-31)
+    sendDataStr.append("D" + QString::number(curDate.dayOfWeek())); // days of week (1-7)
+    sendDataStr.append("M" + QString::number(curDate.month())); // months
+    sendDataStr.append("y" + QString::number(curDate.year()-2000)); // years
+
+    sendDataStr.append("#");
+
+    serial->write(sendDataStr.toLatin1());
+    serial->flush();
 }
 
 void MainWindow::onReceiveData()
@@ -320,6 +365,19 @@ void MainWindow::onEraseDataButtonClicked()
     }
 }
 
+void MainWindow::onSetDateTimeButtonClicked()
+{
+    QMessageBox msgBox;
+    if(serial->isOpen())
+        emit syncDateTime();
+    else
+    {
+        msgBox.setText("System is not connected, please try to connect again.");
+        msgBox.setIcon(QMessageBox::Warning);
+        msgBox.exec();
+    }
+}
+
 void MainWindow::loadAppStyle(MainWindow::G_MAINWINDOW_STYLE style)
 {
     switch (style)
@@ -394,7 +452,7 @@ void MainWindow::reloadAppStylesheet()
 
 void MainWindow::rfidReceivedDataUpdate()
 {
-    QDate curDate;
+
     int16_t aaValue=0, bbValue=0, ccValue=0, nnnValue=0;
 
     ui->aalineEditRead->setText(aaValueStr);
@@ -408,20 +466,10 @@ void MainWindow::rfidReceivedDataUpdate()
     nnnValue = nnnValueStr.toInt();
 
     curDate = QDate::currentDate();
-    if(aaValue>=1 && aaValue<=99 && (bbValue == (curDate.day() + curDate.dayOfWeek())))   // Tag Valid
+
+    if(aaValue>=0 && aaValue<=99 && (bbValue == (curDate.day() + curDate.dayOfWeek())))   // Tag Valid
     {
         qDebug("Read data button clicked");
-
-        // data frame:  iINSTRUCTIONpNUMPULSE#
-        sendDataStr.clear();
-
-        sendDataStr.append("i" + QString::number(OUTPUT_PULSE)); // add instruction
-        sendDataStr.append("p" + QString::number(nnnValue));   // number of pulse to be created
-
-        sendDataStr.append("#");
-
-        serial->write(sendDataStr.toLatin1());
-        serial->flush();
 
         QMessageBox msgBox;
         QPixmap pixmap(":/images/files/images/ok-icon.png");
@@ -432,7 +480,7 @@ void MainWindow::rfidReceivedDataUpdate()
         msgBox.exec();
         qDebug("exit Message box.");
 
-        emit eraseTag();
+//        emit eraseTag();
     }
     else if(aaValue==0 && bbValue==0 && ccValue==0 && nnnValue==0 )
     {
