@@ -78,6 +78,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::onActionConnectTriggered()
 {
+    QMessageBox msgBox;
     if(!serial->isOpen())
     {
         if(serial->open(QIODevice::ReadWrite)) // successful
@@ -93,16 +94,17 @@ void MainWindow::onActionConnectTriggered()
             serial->setStopBits(QSerialPort::OneStop);
             qDebug() << "Serialport Init complete.";
 
+            ui->statusBar->showMessage("Comport is connected.");
             serial->setRequestToSend(0);
             serial->setDataTerminalReady(1);
             serial->setDataTerminalReady(0);
-//            serial->setRts(0); // 3V3 output on boot0
-//            serial->setDtr(1); // 0v output on reset
-//            serial->setDtr(0); // 3V3 output on reset
         }
         else
         {
             qDebug()<<"Serial Port Open Error.";
+            msgBox.setText("Can not connect to comport, please try again!");
+            msgBox.setIcon(QMessageBox::Critical);
+            msgBox.exec();
         }
     }
 }
@@ -115,6 +117,8 @@ void MainWindow::onActionDisconnectTriggered()
         qDebug()<<"Serial Port Closed.";
         ui->actionConnect->setEnabled(true);
         ui->actionDisconnect->setEnabled(false);
+
+        ui->statusBar->showMessage("Comport is disconnected.");
     }
 }
 
@@ -209,14 +213,14 @@ void MainWindow::EraseRFIDData()
     serial->write(sendDataStr.toLatin1());
     serial->flush();
 
-    ui->aalineEditRead->setText("0");
-    ui->bblineEditRead->setText("0");
-    ui->cclineEditRead->setText("0");
-    ui->nnnlineEditRead->setText("0");
+    ui->aalineEditRead->clear();
+    ui->bblineEditRead->clear();
+    ui->cclineEditRead->clear();
+    ui->nnnlineEditRead->clear();
 
-    msgBox.setText("Card erasing is successful.");
-    msgBox.setIcon(QMessageBox::Information);
-    msgBox.exec();
+//    msgBox.setText("Card erasing is successful.");
+//    msgBox.setIcon(QMessageBox::Information);
+//    msgBox.exec();
 }
 
 void MainWindow::updateTime()
